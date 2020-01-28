@@ -1,0 +1,66 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left = 2.5cm, right = 2.5cm, top = 3cm, bottom = 3cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Práctica 5: Implementción de MiniC \\
+       {\small Lenguajes de Programación I}}
+
+\author{López Soto Ramses Antonio \\
+        Quintero Villeda Erik}
+
+\begin{document}
+    \maketitle
+
+    \section*{Introducción}
+
+     \subsection*{Objetivo}
+     Extender \textit{BAE} para que se comporte como un \textit{lenguaje de programación imperativo}.
+
+    \section*{Desarrollo}
+    Los módulos implementados anteriormente que fueron extendidos con las funciones adaptadas:
+
+        \begin{itemize}
+            \item Sintax
+                  
+                \begin{itemize}
+                    \item frVars :: Expr -> [Identifier]
+                    \item subst :: Expr -> Substitution -> Expr
+                \end{itemize}
+
+            \item Dynamic
+            
+                \begin{itemize}
+                    \item eval1 :: (Memory, Expr) -> (Memory, Expr)
+                    \item evals :: (Memory, Expr) -> (Memory, Expr)
+                    \item evale :: Expr -> Expr
+                \end{itemize}
+
+        \end{itemize}
+
+    También se implementó un nuevo módulo \textit{Memory} con las siguientes funciones:
+
+        \begin{itemize}
+            \item newAddress :: Memory -> Expr
+            \item access :: Address -> Memory -> Maybe Value
+            \item update :: Cell -> Memory -> Maybe Value
+        \end{itemize}
+
+    Para mayor detalle, véase la implemetación en el directorio BAE/src/BAE/.
+
+    \section*{Conclusión}
+    La práctica nos tomó más tiempo de lo esperado pues, como en prácticas pasadas,
+    el módulo \textit{Dynamic} nos causó muchos problemas. Al extender \textit{BAE} haciendo uso
+    del módulo  \textit{Memory}, no se reconocía éste, mandaba errores que no entendíamos, 
+    la extensión nos costó más trabajo de implementar, pero todas las funciones se pudieron hacer
+    casi en su totalidad. A diferencia de \textit{Dynamic}, los módulos \textit{Sintax y Memory} fueron muy sencillos,
+    pues sólo bastaba con gregar algunas cosas y/o implementar cosas muy rápido. \vspace{.3cm}
+
+    En conclusión, El objetivo inicial de la práctica fue lcanzado, pues se implementó una simulación 
+    (pequeña) de lo que es un \textit{Leguaje de programación impertivo}  
+\end{document}
+

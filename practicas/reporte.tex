@@ -1,0 +1,56 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left = 2.5cm, right = 2.5cm, top = 3cm, bottom = 3cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\title{Práctica 6: Máquina $\mathcal{K}$ \\
+       {\small Lenguajes de Programación I}}
+
+\author{López Soto Ramses Antonio \\
+        Quintero Villeda Erik}
+
+\begin{document}
+    \maketitle
+
+    \section*{Introducción}
+
+     \subsection*{Objetivo}
+        Extender el lenguaje $EAB$, agregando pila y memoria para que se simule la máquina $\mathcal{K}$.
+
+    \section*{Desarrollo}
+    A partir de la práctica pasada, extendimos el lenguaje $EAB$, para que simulara la máquina $\mathcal{K}$.
+    Los módulos modificados son:
+
+    \begin{center}
+        data State = E (Memory, Stack, Expr) | R (Memory, Stack, Expr) | P (Memory, Stack, Expr) deriving (Eq,Show)
+    \end{center}
+
+    \begin{itemize}
+        \item Sintax
+            \begin{itemize}
+                \item frVars :: State -> [Identifier]
+                \item subst :: State -> Substitution -> State
+                \item alphaEq :: State -> State -> Bool
+            \end{itemize}
+
+        \item Dynamic
+            \begin{itemize}
+                \item eval1 :: State -> State
+                \item evals :: State -> State
+            \end{itemize}
+    \end{itemize}
+
+    \section*{Conclusión}
+    La práctica fue divertida de impplementar, pues como se dijo en prácticas pasadas, "Dynamic" 
+    fue lo que más nos costó trabajo. Tuvimos problemas al implementar las reglas de todo lo
+    agregado a "Dynamic", pero se logró arreglar en parte. "Sintax" fue muy sencillo pues al no
+    afectar en nada la semántica, fue muy rápida su implementación. \vspace{.3cm}
+
+    En resumen, el objetivo se alcanzó de forma parcial, pero logramos entender de una mejor manera
+    cómo es el funcionamiento de la máquina $\mathcal{K}$ junto con las excepciones y/o continuaciones.
+
+\end{document}

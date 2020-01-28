@@ -1,0 +1,141 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[left = 2.5cm, right = 2.5cm, top = 3cm, bottom = 3cm]{geometry}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+
+\author{López Soto Ramses Antonio \\
+        Quintero Villeda Erik}
+
+\title{Práctica 1: Primer intérprete de Expresiones Aritmético-Booleanas \\
+       {\small Lenguajes de Programación I}}
+
+\date{21 de agosto de 2019}
+
+\begin{document}
+\maketitle
+
+  \section*{Introducción}
+
+  \subsection*{Objetivo}
+  Implementar un intérprete de expresiones artimético-booleanas (\textbf{EAB})
+  a través del lenguaje de programación \textit{Haskell}.\vspace{.3cm}
+
+  PostFix se trata de un lenguaje simple basado en una pila e inspirado en el
+  lenguaje gráfico PostScript, el lenguaje de programación Forth y las
+  calculadoras HP.
+
+  \section*{Desarrollo}
+  La implementación del intérprete se realizo por medio del lenguaje de
+  programación \textit{Haskell} a manera de simular el mismo comportamiento del
+  lenguaje \textit{Postfix}
+
+  \subsection*{Implementación}
+  Para la implementación del intérprete se utilizó lo siguientes:\vspace{.2cm}
+
+
+  \hspace{.5cm} data Instruction = I Int | B Bool \vspace{.1cm}
+
+  \hspace{4cm}                  | ADD | AND | OR | DIV | EQQ | EXEC \vspace{.1cm}
+
+  \hspace{4cm}                  | GET | Gt | Lt | POW | MAX | MIN | FACT | MUL \vspace{.1cm}
+
+  \hspace{4cm}                  | NOT | POP | REM | SEL | SUB \vspace{.1cm}
+
+  \hspace{4cm}                  | SWAP | ES [Instruction] deriving (Eq, Show) \vspace{.2cm}
+
+
+  \hspace{.5cm} type Stack = [Instruction]\vspace{.2cm}
+
+  \hspace{.5cm} type Program = [Instruction]\vspace{.2cm}
+
+  \hspace{.5cm} data Expr = N Int | T | F | Succ Expr | Pred Expr \vspace{.1cm}
+
+  \hspace{4cm}             | Expr :+ Expr | Expr :− Expr | Expr :∗ Expr \vspace{.1cm}
+
+  \hspace{4cm}             | Expr :/ Expr | Expr :\% Expr | Not Expr  \vspace{.1cm}
+
+  \hspace{4cm}             | Expr :& Expr | Expr :| Expr \vspace{.1cm}
+
+  \hspace{4cm}             | Expr :> Expr | Expr :< Expr | Expr := Expr \vspace{.1cm}
+
+  \hspace{4cm}             | Expr :ˆ Expr| Max Expr Expr | Min Expr Expr \vspace{.1cm}
+
+  \hspace{4cm}             | Fact Expr deriving (Eq,Show) \vspace{.3cm}
+
+  Las funciones implementadas en el archivo \textit{practica1.hs} fueron Los
+  siguientes:\vspace{.3cm}
+
+  \begin{itemize}
+    \item \textit{Función que se encarga de realizar todas las operaciones
+                  aritméticas haciendo uso de instrucciones.}\vspace{.05cm}
+
+                  arithOperation :: Instruction -> Instruction -> Instruction -> Instruction
+
+    \item \textit{Función que se encarga de mostrar la valuación del operador
+                  binario AND a modo de instrucción}\vspace{.05cm}
+
+                  bboolOperation :: Instruction -> Instruction -> Instruction -> Instruction
+
+    \item \textit{Función que se encarga de mostrar la valuación del operador
+                  unario NOT a modo de instrucción}\vspace{.05cm}
+
+                  uboolOperation :: Instruction -> Instruction -> Instruction
+
+    \item \textit{Función que se encarga de mostrar el resultado luego de
+                    comparar si dos números son iguales o uno es mayor o menor
+                    que otro.}\vspace{.05cm}
+
+                    relOperation :: Instruction -> Instruction -> Instruction -> Instruction
+
+    \item \textit{Función que se encarga de realizar las operaciones de una
+                    pila usando las instrucciones definidas}\vspace{.05cm}
+
+                    stackOperation :: Stack -> Instruction -> Stack
+
+    \item \textit{Función que devuelve la lista de instrucciones y la pila}\vspace{.05cm}
+
+                    execOperation :: [Instruction] -> Stack -> Instruction -> ([Instruction], Stack)
+
+    \item \textit{Función que se encarga de de realizar la evaulación de un
+                    programa y una lista de instrucciones}\vspace{.05cm}
+
+                    executeProgram :: Program -> Stack -> Stack
+
+    \item \textit{Función que se encarga de traducir una istrucción a un programa}\vspace{.05cm}
+
+                    compile:: Expr -> Program
+
+    \item \textit{Función que se encarga de traducir una expresión a una instrucción}\vspace{.05cm}
+
+                    execute :: Expr -> Instruction
+
+  \end{itemize}
+
+  A lo largo de la práctica se hizo uso de la recursión para definir todas
+  y cada una de las funciones requieridas.
+
+  \section*{Conclusión}
+  La implementación del intérprete fue un tanto complicada. Acabamos de
+  implementar el intérprete con tiempo, pero al verificarla, notamos que
+  algunas funciones se encontraban mal implementadas, ya que, nosotros definimos
+  las funciones de una forma, la cual, no era correcta. Por lo que tuvimos que
+  volver a implementar y arreglar algunas cosas.\vspace{.3cm}
+
+  Simular el comportamiento de PostFix a través de este intérprete nos ayudó a
+  comprender de una manera mucho más clara su comportamiento, y además, a tener
+  el cuidado de verificar si la implementación es la correcta o se debe de
+  corregir y/o mejorar, si es posible.\vspace{.3cm}
+
+  En conclusión, lo que esta práctica tiene como fin, es que el lenguaje PostFix
+  sea comprendido de manera más fácil por medio de una implementación, la cual
+  no es idéntica al lenguaje pero si cercana para comprender su comportamiento.
+
+
+
+\end{document}

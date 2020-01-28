@@ -1,0 +1,92 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left = 2.5cm, right = 2.5cm, top = 2.5cm, bottom = 2.5cm]{geometry}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+
+\author{López Soto Ramses Antonio}
+
+\title{Ejercicio Semanal 2: Cálculo Lambda \\
+       {\small Lenguajes de Programación I}}
+
+\date{21 de agosto de 2019}
+
+\begin{document}
+    \maketitle
+
+    \subsection*{Objetivo}
+    Simular el comportamiento del \textit{Cálculo Lambda} sin tipos.
+
+    \section*{Introducción}
+    El llamado \textit{Cálculo Lambda} es considerado el \underline{lenguaje de 
+    programación universal} más pequeño, pues es conformado por una regla de
+    transformación simple y un esquema para definir funciones. Es 
+    equivalente a las \textit{Máquinas de Turing} porque es capaz de expresar y
+    evaluar cualquier función computable. \vspace{.3cm}
+
+    El cálculo Lambda puro, $\lambda ^U$ se define con la siguiente sintaxis 
+    concreta: $$e::= x | \lambda x.e | ee$$ \vspace{.3cm}
+
+    Una función se representa: $$f(x)= e =_{def} \lambda x.e$$\vspace{.3cm}
+
+    \section*{Desarrollo}
+    Las funciones que se muestran a continuación fueron implementadas en el
+    lenguaje de programación \textit{Haskell}.
+
+    \hspace{3cm} data Expr = V Identifier \vspace{.1cm}
+
+    \hspace{4.5cm} | L Identifier Expr \vspace{.1cm}
+
+    \hspace{4.5cm} | App Expr Expr deriving(Eq) \vspace{.3cm}
+
+    \hspace{1cm} type Identifier = String\vspace{.3cm}
+
+    \hspace{1cm} type Substitution = (Identifier, Expr) \vspace{.3cm}
+
+
+
+    \begin{itemize}
+
+        \item[] \textit{- Función que obtiene las variables libres de una expresión -}\vspace{.1cm}
+        
+               frVars :: Expr -> [Identifier]
+
+        \item[] \textit{- Función que se encarga de incrementar variables en una unidad -}\vspace{.1cm}
+    
+               incrVar :: Identifier -> Identifier
+
+        \item[] \textit{- Función que se encarga de devolver una expresión equivalente -}\vspace{.1cm}
+        
+               alphaExpr :: Expr -> Expr
+
+        \item[] \textit{- Función que se encarga de realizar una sustitución dada -}\vspace{.1cm}
+
+               subst :: Expr -> Substitution -> Expr
+
+        \item[] \textit{- Función que se encarga de implementar una beta reducción -}\vspace{.1cm}
+        
+               beta :: Expr -> Expr
+
+        \item[] \textit{- Función que determina si una expresión es normal -}\vspace{.1cm}
+        
+               normal :: Expr -> Bool
+
+        \item[] \textit{- Función que se encarga de evaluar una expresión lambda -} \vspace{.1cm}
+    
+               eval :: Expr -> Expr
+
+    \end{itemize}
+
+    \section*{Conclusión}
+    Algunos de los problemascon los cuales se tuvo que lidiar: fueron con la
+    implementación de las funciones \textit{normal y eval}, pues las ideas de cómo
+    resolver algunos conflictos tomó tiempo.\vspace{.3cm}
+
+    En esta ejercicío práctico quedó más claro como es que se comporta y funciona
+    el cálculo Lambda sin tipos.
+
+\end{document}

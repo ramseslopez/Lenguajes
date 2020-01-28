@@ -1,0 +1,200 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[left = 2.5cm, right = 2.5cm, top = 3cm, bottom = 3cm]{geometry}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{proof}
+
+\author{López Soto Ramses Antonio \\
+        Quintero Villeda Erik}
+
+\title{Práctica 2: El Lenguaje EAB \\
+       {\small Lenguajes de Programación I}}
+
+\date{13 de septtiembre de 2019}
+
+\begin{document}
+\maketitle
+
+    \subsection*{Objetivo}
+    Implementar la semántica del lenguaje EAB en el lenguaje de programación \textit{Haskell}
+
+    \section*{Introducción}
+
+    \subsection*{Semántica dinámica}
+    Las reglas de la semántica dinámica son las siguientes:\vspace{.2cm}
+
+    - Estados\vspace{.5cm}
+
+    \infer[vtrue]{bool[true] {\hspace{.1cm} valor}}{}\vspace{.5cm}
+    
+    \infer[vfalse]{bool[false] {\hspace{.1cm} valor}}{}\vspace{.5cm} 
+    
+    \infer[vnum]{num[n] {\hspace{.1cm} valor}}{} \vspace{.5cm}
+    
+    \infer[edo]{t {\hspace{.1cm} estado}}{t {\hspace{.1cm} asa}} \vspace{.5cm}
+
+    - Estados iniciales\vspace{.5cm}
+
+     \infer[ein]{t {\hspace{.1cm} inicial}}{t {\hspace{.1cm} asa \hspace{.1cm} FV(t) = \emptyset}} \vspace{.5cm}
+
+     - Estados finales\vspace{.5cm}
+
+     \infer[vtrue]{bool[true] {\hspace{.1cm} valor}}{}\hspace{.2cm} \infer[vfalse]{bool[false]{\hspace{.1cm} valor}}{}\hspace{.2cm} \infer[vnum]{num[n] {\hspace{.1cm} valor}}{} \vspace{.5cm}
+
+     \infer[ftrue]{bool[true] {\hspace{.1cm} final}}{}\hspace{.2cm} \infer[ffalse]{bool[false] {\hspace{.1cm} final}}{} \hspace{.2cm} \infer[fnum]{num[n] {\hspace{.1cm} final}}{} \vspace{.5cm}
+
+     - Jucios de las expresiones aritméticas\vspace{.5cm}
+
+     \infer[esumaf]{suma(num[n],num[m]) \rightarrow num[n + m]}{} \vspace{.5cm}
+
+     \infer[eprodf]{prod(num[n],num[m]) \rightarrow num[n * m]}{} \vspace{.5cm}
+
+     \infer[esumai]{suma(t_1,t_2]) \rightarrow suma(t_1',t_2)}{t_1 \rightarrow t_1'} \vspace{.5cm}
+
+     \infer[esumad]{suma(num[n],t_2]) \rightarrow suma(num[n],t_2')}{t_2 \rightarrow t_2'} \vspace{.5cm}
+
+     \infer[eprodi]{prod(t_1,t_2]) \rightarrow prod(t_1',t_2)}{t_1 \rightarrow t_1'} \vspace{.5cm}
+
+     \infer[esumad]{prod(num[n],t_2]) \rightarrow prod(num[n],t_2')}{t_2 \rightarrow t_2'} \vspace{.5cm}
+
+     \infer[esucn]{suc(num[n])\rightarrow num[n+1]}{}\vspace{.5cm}
+
+     \infer[epred0]{pred(num[0])\rightarrow num[0]}{}\vspace{.5cm}
+
+     \infer[epreds]{pred(num[n+1])\rightarrow num[n]}{}\vspace{.5cm}
+
+     \infer[esuc]{suc(t)\rightarrow suc(t')}{t\rightarrow t'}\vspace{.5cm}
+
+     \infer[epred]{pred(t)\rightarrow pred(t')}{t\rightarrow t'}\vspace{.5cm}
+
+     - Jucios de expresiones booleanas\vspace{.3cm}
+
+     \infer[eiftrue]{if(boo[true],t_2,t_3)\rightarrow t_2}{} \vspace{.5cm}
+
+     \infer[eiffalse]{if(boo[false],t_2,t_3)\rightarrow t_3}{} \vspace{.5cm}
+
+     \infer[eif]{if(t_1,t_2,t_3)\rightarrow if(t_1',t_2,t_3)}{t_1\rightarrow t_1'} \vspace{.5cm}
+
+     \infer[]{and(t_1,t_2) \rightarrow and(t_1',t_2)}{t_1\rightarrow t_1'}\vspace{.5cm}
+
+     \infer[]{and(bool[true],t_2) \rightarrow and(bool[true],t_2')}{t_2\rightarrow t_2'}\vspace{.5cm}
+
+     \infer[eiand]{and(bool[false],t_2) \rightarrow bool[false])}{}\vspace{.5cm}
+
+     \infer[]{or(t_1,t_2) \rightarrow or(t_1',t_2)}{t_1\rightarrow t_1'}\vspace{.5cm}
+
+     \infer[]{or(bool[true],t_2) \rightarrow bool[true]}{}\vspace{.5cm}
+
+     \infer[]{not(t) \rightarrow not(t')}{t_1\rightarrow t_1'}\vspace{.5cm}
+
+     \infer[]{not(bool[false]) \rightarrow bool[true])}{}\vspace{.5cm}
+
+     \infer[]{not(bool[true]) \rightarrow bool[false]}{}\vspace{.5cm}
+
+     \infer[]{lt(t_1,t_2) \rightarrow lt(t_1',t_2)}{t_1\rightarrow t_1'}\vspace{.5cm}
+
+     \infer[]{lt(num[n],t_2) \rightarrow lt(num[n],t_2')}{t_2\rightarrow t_2'}\vspace{.5cm}
+
+     \infer[]{l(num[n],num[m]) \rightarrow bool[n < m])}{}\vspace{.5cm}
+
+     \infer[]{gt(t_1,t_2) \rightarrow gt(t_1',t_2)}{t_1\rightarrow t_1'}\vspace{.5cm}
+
+     \infer[]{gt(num[n],t_2) \rightarrow gt(num[n],t_2')}{t_2\rightarrow t_2'}\vspace{.5cm}
+
+     \infer[]{gt(num[n],num[m]) \rightarrow bool[n > m])}{}\vspace{.5cm}
+
+     \infer[]{eq(t_1,t_2) \rightarrow eq(t_1',t_2)}{t_1\rightarrow t_1'}\vspace{.5cm}
+
+     \infer[]{eq(num[n],t_2) \rightarrow eq(num[n],t_2')}{t_2\rightarrow t_2'}\vspace{.5cm}
+
+     \infer[]{eq(num[n],num[m]) \rightarrow bool[n = m])}{}\vspace{.5cm}
+
+     - Jucios de let\vspace{.3cm}
+
+     \infer[eletf]{let(v,x.e_2) \rightarrow e_{2[x:=v]}}{v {\hspace{.5cm} valor}}\vspace{.5cm}
+
+     \infer[eleti]{let(t_1,x.t_2)\rightarrow let(t_1',x.t_2)}{t1\rightarrow t_1'}\vspace{.5cm}
+
+     \subsection*{Semántica estática}
+     Las reglas de la semántica estática son las siguientes 
+
+     - Tipado de variables\vspace{.5cm}
+
+     \infer[tvar]{\Gamma,x: T \vdash x: T}{} \vspace{.5cm}
+
+     - Tipado de valores numéricos\vspace{.5cm}
+
+     \infer[tnum]{\Gamma \vdash num[n]:Nat}{}\vspace{.5cm}
+
+     -Tipado de valores booleanos\vspace{.5cm}
+
+    
+     \infer[ttrue]{\Gamma \vdash bool[true]:Bool}{} \vspace{.5cm}
+
+     \infer[tfalse]{\Gamma \vdash bool[false]:Bool}{} \vspace{.5cm}
+
+     - Tipado de expresiones aritméticas\vspace{.5cm}
+
+    
+     \infer[tsum]{\Gamma \vdash suma(t_1,t_2):Nat}{{\Gamma \vdash t_1 : Nat} \hspace{.1cm} {\Gamma \vdash t_2 : Nat}}\vspace{.5cm}
+
+     \infer[tprod]{\Gamma \vdash prod(t_1,t_2):Nat}{{\Gamma \vdash t_1 : Nat} \hspace{.1cm} {\Gamma \vdash t_2 : Nat}}\vspace{.5cm}
+    
+     \infer[tsuc]{\Gamma \vdash suc(t): Nat}{\Gamma \vdash t:Nat}\vspace{.5cm}
+
+     \infer[tpred]{\Gamma \vdash pred(t): Nat}{\Gamma \vdash t:Nat}\vspace{.5cm}
+
+     - Tipado de espresiones booleanas\vspace{.5cm}
+
+     \infer[tand]{\Gamma \vdash and(t_1,t_2):Bool}{{\Gamma \vdash t_1 : Bool} \hspace{.1cm} {\Gamma \vdash t_2 : Bool}}\vspace{.5cm}
+
+     \infer[tor]{\Gamma \vdash or(t_1,t_2):Nat}{{\Gamma \vdash t_1 : Bool} \hspace{.1cm} {\Gamma \vdash t_2 : Bool}}\vspace{.5cm}
+
+     \infer[tnot]{\Gamma \vdash not(t): Bool}{\Gamma \vdash t:Bool}\vspace{.5cm}
+
+     \infer[tlt]{\Gamma \vdash lt(t_1,t_2):Bool}{{\Gamma \vdash t_1 : Nat} \hspace{.1cm} {\Gamma \vdash t_2 : Nat}}\vspace{.5cm}
+
+     \infer[tgt]{\Gamma \vdash gt(t_1,t_2):Bool}{{\Gamma \vdash t_1 : Nat} \hspace{.1cm} {\Gamma \vdash t_2 : Nat}}\vspace{.5cm}
+
+     \infer[teq]{\Gamma \vdash eq(t_1,t_2):Nat}{{\Gamma \vdash t_1 : Nat} \hspace{.1cm} {\Gamma \vdash t_2 : Nat}}\vspace{.5cm}
+
+     \infer[tif]{\Gamma \vdash if(t_1,t_2,t_3):T}{{\Gamma \vdash t_1 : Bool} \hspace{.1cm} {\Gamma \vdash t_2 : T} \hspace{.1cm} {\Gamma \vdash t_3 : T}}\vspace{.5cm}
+
+     - Tipado de expresiones let\vspace{.5cm}
+    
+     \infer[tlet]{\Gamma \vdash let(e_1,x.e_2):S}{{\Gamma \vdash e_1 : T} \hspace{.1cm} {\Gamma, x:T \vdash e_2 : T}}
+
+     \section*{Desarollo}
+     La implenentación de las relgas se realizó a través del lenguaje de programación Haskell.\vspace{.3cm}
+
+     En el código se visualizará de una mejor manera cómo se hizo.
+
+     \section*{Conclusión}
+     La implenentación de la semántica de la EAB fue muy problemática pues cada que lograbamos que una función se ejecutara 
+     correctamente, salían más y más casos en los cuales se ciclaba o no lanzara el resultado esperado. La función con la 
+     cual ésto sucedió más veces fue con evals pues sólo nos devolvía los casos en los cuales la entrada era correcta, pero en
+     otros casos se ciclaba.\vspace{.3cm}
+
+     En resumen, la práctica fue mucho más compleja en resolver los errores de ejecucion.\vspace{2cm}
+
+
+
+
+     \textbf{El archivo Semantic.hs sí funciona pero al hacer la llamada con make desde el archivo raíz marca un error que no supimos arreglar.
+     Se debe ejecutar en el directorio BAE/src.}
+
+
+
+
+
+
+
+
+
+ 
+\end{document}
